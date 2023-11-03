@@ -7,36 +7,25 @@ import static java.lang.Integer.parseInt;
 
 public class ConsoleInteraction {
 
-
     /**
-     * Scanner is used for reading user input.
+     * Scanner -> used for reading user input.
+     * Maze -> The current maze.
+     * isMazeAvailable -> indicates whether the maze exists.
      */
     private Scanner scanner;
 
-    /**
-     * The current maze. It is null when the game starts.
-     * {@code isMazeAvailable} indicates whether the
-     * maze exists.
-     */
     private Maze maze;
 
-    /**
-     * Tells if the Maze is generated or not
-     */
     private boolean isMazeAvailable = false;
 
-
     /**
-     * An endless loop that prints available options and
-     * processes user input. All available options are:
-     * <p>
-     * 1. Generate a new maze<br>
-     * 2. Display the maze<br>
-     * 3. Find the escape<br>
-     * 4. Exit <br>
-     * <p>
-     * The option 2 and 3 are available only if
-     * {@code isMazeAvailable == true}.
+     * A menu created for user interaction with the following options :
+     * 1. Generate a new maze
+     * 2. Display the maze
+     * 3. Find the maze escape
+     * 4. End Game
+     * 
+     * The option 2 and 3 become available when -> isMazeAvailable == true.
      */
     public void start() {
         scanner = new Scanner(System.in);
@@ -46,9 +35,9 @@ public class ConsoleInteraction {
             System.out.println("1. Generate a new maze");
             if (isMazeAvailable) {
                 System.out.println("2. Display the maze");
-                System.out.println("3. Find the escape");
+                System.out.println("3. Find the maze escape");
             }
-            System.out.println("4. Exit");
+            System.out.println("4. End Game");
             System.out.print("Enter your Choice : ");
             try {
                 var choice = scanner.nextInt();
@@ -70,16 +59,15 @@ public class ConsoleInteraction {
     }
 
     /**
-     * Closes an input and finishes the game.
+     * End of game and final statement.
      */
     private void exit() {
         scanner.close();
-        System.out.println("Bye!");
+        System.out.println("\nThank you for playing!");
     }
 
     /**
-     * Asks a user to enter the dimensions of the new maze
-     * and then generates and prints the new one.
+     * Asks for the dimensions of the new maze and then generates the new one.
      */
     private void generate() {
         System.out.print("Enter the size of the new maze (in the [size] or [height width] format) : ");

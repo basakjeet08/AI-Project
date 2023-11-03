@@ -1,6 +1,5 @@
 package model;
 
-
 import algo.generation.PassageTree;
 import algo.solving.Fugitive;
 import java.util.function.Consumer;
@@ -14,13 +13,10 @@ import static model.Cell.Type.WALL;
 public class Maze {
 
     /**
-     * The height of the maze in cells.
+     * The height and width of the maze in cells.
      */
     private final int height;
 
-    /**
-     * The width of the maze in cells.
-     */
     private final int width;
 
     /**
@@ -54,8 +50,6 @@ public class Maze {
 
     /**
      * Generates a new square maze of a given size.
-     *
-     * @param size size of a maze
      */
     public Maze(int size) {
         this(size, size);
@@ -74,10 +68,6 @@ public class Maze {
 
     /**
      * Creates a new cell with given coordinates and a type in the grid.
-     *
-     * @param row    a row in the grid
-     * @param column a column in the grid
-     * @param type   the new cell type
      */
     private void putCell(int row, int column, Cell.Type type) {
         grid[row][column] = new Cell(row, column, type);
@@ -86,6 +76,7 @@ public class Maze {
     /**
      * Fills every second cell with a passage and the others with a wall.
      * After this method, a maze looks like this:
+     * 
      * <pre>
      * ██████████
      * ██  ██  ██
@@ -110,6 +101,7 @@ public class Maze {
      * If the maze has an even height or width it is needed to fill the
      * last row or column of the grid with a wall (or, otherwise, it will
      * contain passages at the outer border).
+     * 
      * <pre>
      * ████████████
      * ██  ██  ██
@@ -118,7 +110,9 @@ public class Maze {
      * ████████████
      * ██  ██  ██
      * </pre>
+     * 
      * becomes
+     * 
      * <pre>
      * ████████████
      * ██  ██  ████
@@ -129,8 +123,10 @@ public class Maze {
      * </pre>
      */
     private void fillGaps() {
-        if (height % 2 == 0) wallLastRow();
-        if (width % 2 == 0) wallLastColumn();
+        if (height % 2 == 0)
+            wallLastRow();
+        if (width % 2 == 0)
+            wallLastColumn();
     }
 
     /**
@@ -152,6 +148,7 @@ public class Maze {
     /**
      * Calculates the index of the passage in the last row. For a maze
      * with an odd (1) and even (2) width its indices differ:
+     * 
      * <pre>
      * (1) ██████  ██
      * (2) ██████  ████
@@ -166,6 +163,7 @@ public class Maze {
     /**
      * Puts entrance and exit passages to upper left and lower right
      * corners. For example:
+     * 
      * <pre>
      * ████████████
      * ██  ██  ████
@@ -174,7 +172,9 @@ public class Maze {
      * ████████████
      * ████████████
      * </pre>
+     * 
      * becomes
+     * 
      * <pre>
      * ██  ████████
      * ██  ██  ████
@@ -195,6 +195,7 @@ public class Maze {
      * Creates random passages between isolated passage cells such
      * that every cell is connected to the other in one way and
      * has no cycles. For example:
+     * 
      * <pre>
      * ██  ██████
      * ██  ██  ██
@@ -202,7 +203,9 @@ public class Maze {
      * ██  ██  ██
      * ██████  ██
      * </pre>
-     * can become
+     * 
+     * becomes
+     * 
      * <pre>
      * ██  ██████
      * ██      ██
@@ -210,8 +213,6 @@ public class Maze {
      * ██      ██
      * ██████  ██
      * </pre>
-     *
-     * @see PassageTree
      */
     private void generatePassages() {
         new PassageTree(height, width)
@@ -221,8 +222,6 @@ public class Maze {
 
     /**
      * Puts a cell in the corresponding place in grid.
-     *
-     * @return lambda to put a cell
      */
     private Consumer<Cell> putCell() {
         return cell -> grid[cell.getRow()][cell.getColumn()] = cell;
@@ -231,6 +230,7 @@ public class Maze {
     /**
      * Finds a path in the maze from its entrance to its exit.
      * For example:
+     * 
      * <pre>
      * ██░░██████████
      * ██░░░░░░██  ██
@@ -241,12 +241,10 @@ public class Maze {
      * ██████████░░██
      * </pre>
      *
-     * <p>If this method is called several times, the path is not
+     * If this method is called several times, the path is not
      * recalculated. It is stored in the grid so it is returned
-     * immediately.</p>
-     *
-     * @return string representation of the maze containing a path
-     * @see Fugitive
+     * immediately.
+     * 
      */
     public String findEscape() {
         if (!isSolved) {
@@ -260,8 +258,6 @@ public class Maze {
 
     /**
      * Return the entrance cell.
-     *
-     * @return the entrance cell
      */
     private Cell getEntrance() {
         return grid[0][1];
@@ -269,8 +265,6 @@ public class Maze {
 
     /**
      * Return the exit cell.
-     *
-     * @return the exit cell
      */
     private Cell getExit() {
         return grid[height - 1][getExitColumn()];
@@ -279,13 +273,14 @@ public class Maze {
     /**
      * Return the string representation of the grid. The path
      * from the entrance to the exit can be displayed if it
-     * is already found and {@code showEscape} is {@code true}.
+     * is already found and {showEscape -> true}.
      * The path is found on demand.
      *
      * <p>
-     * For example:<br>
-     * if path is already found and {@code showEscape} is
-     * {@code true}
+     * For example:
+     * 
+     * {showEscape -> true}
+     * 
      * <pre>
      * ██░░██████████
      * ██░░░░░░██  ██
@@ -295,7 +290,9 @@ public class Maze {
      * ██    ░░░░░░██
      * ██████████░░██
      * </pre>
-     * if {@code showEscape} is {@code false}
+     * 
+     * showEscape -> false}
+     * 
      * <pre>
      * ██  ██████████
      * ██      ██  ██
@@ -305,9 +302,6 @@ public class Maze {
      * ██          ██
      * ██████████  ██
      * </pre>
-     *
-     * @param showEscape show path or not
-     * @return string representation of the maze
      */
     private String toString(boolean showEscape) {
         var sb = new StringBuilder();
@@ -328,18 +322,7 @@ public class Maze {
 
     /**
      * Return the string representation of the grid.
-     * The path is never displayed. For example:
-     * <pre>
-     * ██  ██████████
-     * ██      ██  ██
-     * ██████  ██  ██
-     * ██          ██
-     * ██████  ██████
-     * ██          ██
-     * ██████████  ██
-     * </pre>
-     *
-     * @return string representation of the maze
+     * The path is never displayed.
      */
     @Override
     public String toString() {

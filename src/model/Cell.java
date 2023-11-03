@@ -18,13 +18,10 @@ public class Cell {
     }
 
     /**
-     * The vertical coordinate of this cell in a grid.
+     * The vertical and horizontal coordinates of this cell in a grid.
      */
     private final int row;
 
-    /**
-     * The horizontal coordinate of this cell in a grid.
-     */
     private final int column;
 
     /**
@@ -46,7 +43,6 @@ public class Cell {
         return column;
     }
 
-
     public boolean isWall() {
         return type == Type.WALL;
     }
@@ -57,8 +53,10 @@ public class Cell {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         var cell = (Cell) o;
         return row == cell.row &&
                 column == cell.column &&
